@@ -43,7 +43,7 @@ else if($query [0] == "get"){
 else if($query[0] == "add-keychain"){
 	if($query[1] == NULL || $query[1] == "help"){
 		echo "Usage: passwd add-keychain {name}";
-		exit();$
+		exit();
 	}
 	$res = addNewKeychain($query[1]);
 	
