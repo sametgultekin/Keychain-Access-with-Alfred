@@ -34,7 +34,7 @@
 	<key>silent</key>
 	<true/>
 	<key>subtitle</key>
-	<string></string>
+	<string> Actions: add | get | lock-keychain | add-keychain | change-keychain | help</string>
 	<key>title</key>
 	<string>Keychain Access</string>
 </dict>

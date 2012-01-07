@@ -69,5 +69,36 @@ else if($query[0] == "change-keychain"){
 else if($query[0] == ""){
 	openKeychainAccess();
 }
+else{
+	echo "Usage:\n\n";
+	
+	echo "kyc\n";
+
+	echo "Opens Keychain Access.\n\n";
+
+	echo "kyc add\n";
+
+	echo "Prompts inputbox to add new password.\n\n";
+
+	echo "kyc get {name}\n";
+
+	echo "Gets password named {named} and copies to clipboard.\n\n";
+
+	echo "kyc add-keychain {name}\n";
+
+	echo "Adds new keychain named {name}.\n\n";
+
+	echo "kyc lock-keychain\n";
+	
+	echo "Locks all keychains.\n\n";
+
+	echo "kyc lock-keychain {name}\n";
+
+	echo "Locks keychain named {name}.\n\n";
+
+	echo "kyc change-keychain {name}\n";
+	
+	echo "Changes keychain which is used by extension. (Default is login).\n\n";
+}
 
 ?>
