@@ -122,15 +122,14 @@ function addNewKeychain($name){
 }
 
 function lockKeychain($name){
-	$name = escapeshellarg($name);
 	
 	if($name){
+		$name = escapeshellarg($name);
 		$command = "security 2>&1 >/dev/null lock-keychain $name.keychain";
 		exec($command, &$output);
 	
 		if(preg_match("(could not be found)", $output[0], $nameMatches)){
-			echo "The specified keychain could not be found.";
-			print_r($output);
+			echo "The specified keychain could not be found.\n";
 			exit();
 			}
 			else if($output == NULL){
@@ -140,6 +139,7 @@ function lockKeychain($name){
 	}
 	
 	else{
+
 		$command = "security 2>&1 >/dev/null lock-keychain -a";
 		exec($command, &$output);
 		echo "All keychains are locked.";
@@ -153,5 +153,47 @@ function openKeychainAccess(){
 	exec($command, $output);
 }
 
+function loadSettings(){
+	$settings = simplexml_load_file('./settings.xml');
+	
+	return $settings;
+	
+}
+
+function saveSettings($keychain){
+	
+	/*check available keychains */
+	$command = "security list-keychains";
+	exec($command, $output);
+	$outputString = implode(" ", $output);
+	$pattern = "$keychain.keychain";
+
+	if(!preg_match("($pattern)", $outputString, $matches)){
+		echo "Keychain not found";
+		exit();
+	}
+	
+	/*end of keychain check*/
+	
+	if (!file_exists("settings.xml")) {
+		$settings = new SimpleXMLElement("<settings></settings>");
+	}
+	else {
+		$settings = simplexml_load_file("settings.xml");
+	}
+	
+	$oldKeychain = $settings->keychain;
+	
+	if ($oldKeychain == "") {
+		$settings->addChild('keychain', "$keychain.keychain");
+	}
+	else {
+		$settings->keychain = "$keychain.keychain";
+	}
+	exec("echo '".$settings->asXML()."' > settings.xml");
+	
+	echo "Keychain changed to $keychain";
+	
+}
 
 ?>

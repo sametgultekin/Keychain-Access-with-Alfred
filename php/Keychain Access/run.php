@@ -9,40 +9,42 @@
 // 
 
 include './functions.php';
-
 /*SETTINGS*/
 
-$keychain = "login.keychain";
+$settings =loadSettings();
+$keychain = $settings->keychain;
 
 /*SETTINGS*/
 
 $query = explode(" ",$argv[1]);
 $queryLenght  = count($query);
 
-/*--------------------------------*/
-/* Adding New Password to Keychain*/
+
 if($query[0] == "add"){
-	$name = openAppleInputDialog("Enter a name","i.e: gmail");
-	$account = openAppleInputDialog("Enter account name","i.e: johndoe@gmail.com");
+	$name = openAppleInputDialog("Enter a name","gmail");
+	$account = openAppleInputDialog("Enter account name","johndoe@gmail.com");
 	$where = openAppleInputDialog("Enter domain","http://www.gmail.com");
-	$password = openAppleInputDialog("Enter password","http://www.gmail.com");
-	$comment = openAppleInputDialog("Enter comment","bilibilib");
+	$password = openAppleInputDialog("Enter password","Ad9iA0¡$#");
+	$comment = openAppleInputDialog("Enter comment","comment");
 	
 	addRecord($name, $account, $where, $password, $comment, $keychain);
 	exit();
 }
-/* END of Adding New Password to Keychain*/
-/*--------------------------------*/
+
 
 else if($query [0] == "get"){
-		
+	if($query[1] == "help" || $query[1] == NULL){
+		echo "Usage:\n\n \"kyc get {name}\": \n Gets  keychain named {name}.\n\n";
+		exit();
+	}
+	
 	$res = findRecord($query[1], $keychain);
 	exit();
 }
 
 else if($query[0] == "add-keychain"){
 	if($query[1] == NULL || $query[1] == "help"){
-		echo "Usage: passwd add-keychain {name}";
+		echo "Usage: kyc add-keychain {name}";
 		exit();
 	}
 	$res = addNewKeychain($query[1]);
@@ -50,11 +52,19 @@ else if($query[0] == "add-keychain"){
 }
 else if($query[0] == "lock-keychain"){
 	if($query[1] == "help"){
-		echo "Usage:\n\n \"passwd lock-keychain {name}\": \n Locks given keychain.\n\n";
-		echo "\"passwd lock-keychain\": \n Locks all keychains.";
+		echo "Usage:\n\n \"kyc lock-keychain {name}\": \n Locks given keychain.\n\n";
+		echo "\"kyc lock-keychain\": \n Locks all keychains.";
 		exit();
 	}
+	
 	$res = lockKeychain($query[1]);
+}
+else if($query[0] == "change-keychain"){
+	if($query[1] == "help" || $query[1] == NULL){
+		echo "Usage:\n\n \"kyc change-keychain {name}\": \n Changes keychain which is used by extension.\n\n";
+		exit();
+	}
+	$res = saveSettings($query[1]);
 }
 else if($query[0] == ""){
 	openKeychainAccess();
